@@ -1,9 +1,9 @@
 #include "Account.h"
 #include <fstream>
 
-Account::Account(std::string name, std::string username, std::string password, std::string email, unsigned long balance)
-    : name{name}, username{username}, email{email}, password{password}, balance{balance}, matches_played{0}, matches_won{0}, win_percentage{100} {
-        add_to_database();
+Account::Account(std::string name, std::string username, std::string email, std::string password, unsigned long balance, unsigned int matches_won, unsigned int matches_played,
+                double win_percentage)
+    : name{name}, username{username}, email{email}, password{password}, balance{balance}, matches_won{matches_won}, matches_played{matches_played}, win_percentage{win_percentage} {
     }
     
 void Account::update_win_percentage() {
@@ -36,9 +36,5 @@ void Account::add_to_database() {
     std::ofstream of;
     of.open("accounts.txt", std::ios::app);
     of << '\n' << name << " " << username << " " << email << " " << balance << " " << matches_won << " " << matches_played << " " << password;
-    of.close();
-    
-    of.open("login_info.txt", std::ios::app);
-    of << "\n" << username << " " << password << " " << email;
     of.close();
 }
