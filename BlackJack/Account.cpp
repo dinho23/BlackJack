@@ -28,7 +28,17 @@ bool Account::deposit(long amount) {
     }
 }
 
-unsigned long Account::check_balance() {
+bool Account::withdraw(long amount) {
+    std:: cout << balance << " " << amount << "\n";
+    if(amount < 0 || balance < amount) 
+        return false;
+    else {
+        balance -= amount;
+        return true;
+    }
+}
+
+long Account::check_balance() {
     return balance;
 }
 

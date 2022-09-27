@@ -62,7 +62,7 @@ AS       := D:/MinGW/mingw64/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=D:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) $(IntermediateDirectory)/Player.cpp$(ObjectSuffix) $(IntermediateDirectory)/Account.cpp$(ObjectSuffix) $(IntermediateDirectory)/Deck.cpp$(ObjectSuffix) $(IntermediateDirectory)/Blackjack.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) $(IntermediateDirectory)/Player.cpp$(ObjectSuffix) $(IntermediateDirectory)/Account.cpp$(ObjectSuffix) $(IntermediateDirectory)/Deck.cpp$(ObjectSuffix) $(IntermediateDirectory)/Blackjack.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) 
 
 
 
@@ -93,6 +93,12 @@ PreBuild:
 ##
 ## Objects
 ##
+$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix): Dealer.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Dealer.cpp$(DependSuffix) -MM Dealer.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/Dealer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix): Dealer.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix) Dealer.cpp
+
 $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix): I_Printable.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/I_Printable.cpp$(DependSuffix) -MM I_Printable.cpp
 	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/I_Printable.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) $(IncludePath)

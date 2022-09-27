@@ -29,7 +29,8 @@ public:
     void add_to_database();
     bool deposit(long amount);
     void update_win_percentage();
-    unsigned long check_balance();
+    long check_balance();
+    bool withdraw(long amount);
     virtual void print(std::ostream &os) const override;
 
 };

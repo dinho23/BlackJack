@@ -6,3 +6,6 @@ No Name guest no_email@noemail.com 0 0 0 1234
 No-Name guest no_email@noemail.com 0 0 0 1234
 No-Name guest no_email@noemail.com 0 0 0 1234
 Bob bobby bob@gmail.com 100 0 0 bobpass
+Jack jacky jacky@gmail.com 100 0 0 jackypass
+Jill jill jill@gmail.com 100 0 0 jill
+Carl carl carl@gmail.com 100 0 0 carl

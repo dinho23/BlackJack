@@ -8,13 +8,15 @@
 
 void login(Player &player, size_t &logged_in);
 void create_acc(Player &player, size_t &logged_in);
-int verify_acc(std::string username, std::string email);
+bool verify_acc(std::string username, std::string email);
 
 
 void display_menu() {
     char in{};
     size_t logged_in {0};
     Player player;
+    
+    std::cout << in;
     
     std::cout << "Welcome!\n\nWhat would you like to do:\n";
     
@@ -26,7 +28,7 @@ void display_menu() {
         else {
             std::cout << "1. Play blackjack\n";
         }
-        std::cout << "0. \nExit\n";
+        std::cout << "0. Exit\n";
     
         std::cin >> in;
     
@@ -34,17 +36,22 @@ void display_menu() {
             login(player, logged_in);
         else if (in == '2' && logged_in == 0)
             create_acc(player, logged_in);
-        else if (in == '1' && logged_in == 1)
-            
+        else if (in == '1' && logged_in == 1) {
+            Deck deck;
+            Dealer dealer;
+            Blackjack game = Blackjack(deck, dealer, player);
+            game.play();
+        }
         else if (in == '0')
             std::cout << "Exiting...\n";
-        else
+        else {
             std::cout << "Invalid choice, please try again.\n";
+        }
     } while (in != '0');
     
 }
 
-int verify_acc(std::string username, std::string email) {
+bool verify_acc(std::string username, std::string email) {
     std::string  existing_name{}, existing_username{}, existing_email{}, existing_balance{}, existing_won{}, existing_played{}, existing_password{};
             
     std::ifstream in;
@@ -68,9 +75,13 @@ int verify_acc(std::string username, std::string email) {
             std::cout << "Username already taken, please try another one:\n";
             return 0;
         }
+        if(username.size() < 3) {
+            std::cout << "Username must have be at least 3 characters long, please try again:\n";
+            return 0;
+        }
         if(existing_email == email) {
             std::cout << "eMail already taken, please try another one:\n";
-            return 2;
+            return 0;
         }
     }
     
@@ -83,7 +94,7 @@ void create_acc(Player &player, size_t &logged_in) {
     std::string name{}, username{}, email{}, password{};
     
     do {
-        std::cout << "Enter your name:\n";
+        std::cout << "Enter your first name:\n";
         std::cin >> name;
         std::cout << "Enter your username:\n";
         std::cin >> username;
@@ -133,8 +144,6 @@ void login(Player &player, size_t &logged_in) {
         std::getline(in, existing_played, ' ');
         std::getline(in, existing_password);
         
-        std::cout << existing_username << " " << existing_password << "\n";
-        
         while(username == existing_username && password != existing_password && no_attempts!=0) {
             std::cout << "Wrong password! Please enter the password again.\n";
             std::cout << "Attempts left " << no_attempts << "\n";
@@ -155,10 +164,8 @@ void login(Player &player, size_t &logged_in) {
 
 int main()
 {
-    display_menu();    
     
-    Deck deck;
-    std::cout << deck;
+    display_menu();
     
     return 0;
 }

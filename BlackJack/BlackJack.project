@@ -93,6 +93,8 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="src">
+    <File Name="Dealer.cpp"/>
+    <File Name="Dealer.h"/>
     <File Name="login_info.txt"/>
     <File Name="accounts.txt"/>
     <File Name="Player.cpp"/>

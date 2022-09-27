@@ -27,3 +27,7 @@ void Deck::print(std::ostream &os) const {
         os << cards.at(i).first << " " << cards.at(i).second << "\t";
     
 }
+
+std::pair<int, char> Deck::draw_card(size_t card_no) {
+    return cards.at(card_no);
+}

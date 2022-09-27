@@ -13,6 +13,7 @@ public:
     ~Deck() = default;
     
     virtual void print(std::ostream &os) const override;
+    std::pair<int, char> draw_card(size_t card_no);
 
 };
 

@@ -1,9 +1,11 @@
 #include "Player.h"
 
-Player::Player(Account player)
-    : player {player}, hand {std::make_pair(0,' ')}, no_points {0}
+Player::Player(Account account, std::pair<int, char> hand, unsigned int no_points)
+    : account {account}, hand {def_hand}, no_points {zero}
 {
-    std::cout << "Player succesfully logged in!\n";
+    std::cout << account << " " << hand.first << " " << hand.second << " " << no_points << " " << "Player succesfully logged in!\n";
 }
 
-
+Account Player::account_info() {
+    return account;
+}
