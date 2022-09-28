@@ -2,6 +2,8 @@
 #define _DECK_H_
 #include <utility>
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
 #include "I_Printable.h"
 
 class Deck : public I_Printable
@@ -13,7 +15,7 @@ public:
     ~Deck() = default;
     
     virtual void print(std::ostream &os) const override;
-    std::pair<int, char> draw_card(size_t card_no);
+    std::pair<int, char> draw_card();
 
 };
 

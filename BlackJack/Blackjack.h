@@ -3,8 +3,6 @@
 #include "Player.h"
 #include "Deck.h"
 #include "Dealer.h"
-#include <stdlib.h>
-#include <time.h>
 
 class Blackjack
 {
@@ -17,9 +15,13 @@ public:
     Blackjack(Deck deck, Dealer dealer, Player player);
     ~Blackjack() = default;
     
-    std::pair<int, char> draw();
-    void bet();
-    void play();
+    void bet(Player &player, Dealer &dealer);
+    void play(Player &player);
+    void deposit(Player &player);
+    void withdraw(Player &player);
+    void show_table(Player &player, Dealer &dealer);
+    std::pair<int, char> draw_cards();
+    void reset_hand();
 };
 
 #endif // _BLACKJACK_H_

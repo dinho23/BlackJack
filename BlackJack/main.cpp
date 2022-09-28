@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <ctime>
 #include "Account.h"
 #include "Deck.h"
 #include "Blackjack.h"
@@ -14,7 +15,7 @@ bool verify_acc(std::string username, std::string email);
 void display_menu() {
     char in{};
     size_t logged_in {0};
-    Player player;
+    Player player = Player();
     
     std::cout << in;
     
@@ -26,6 +27,7 @@ void display_menu() {
             std::cout << "2. Create an account\n";
         }
         else {
+            std::cout << player.account_info();
             std::cout << "1. Play blackjack\n";
         }
         std::cout << "0. Exit\n";
@@ -37,10 +39,11 @@ void display_menu() {
         else if (in == '2' && logged_in == 0)
             create_acc(player, logged_in);
         else if (in == '1' && logged_in == 1) {
+            std::cout << player.account_info();
             Deck deck;
             Dealer dealer;
             Blackjack game = Blackjack(deck, dealer, player);
-            game.play();
+            game.play(player);
         }
         else if (in == '0')
             std::cout << "Exiting...\n";
@@ -152,7 +155,8 @@ void login(Player &player, size_t &logged_in) {
         }
         
         if(username == existing_username && password == existing_password) {
-            player = Player(Account(existing_name, existing_username, existing_email, existing_password, std::stoi(existing_balance), std::stoi(existing_won), std::stoi(existing_played)));
+            Account current(existing_name, existing_username, existing_email, existing_password, std::stoi(existing_balance), std::stoi(existing_won), std::stoi(existing_played));
+            player = Player(current);
             logged_in = 1;
             break;
         }
@@ -164,7 +168,6 @@ void login(Player &player, size_t &logged_in) {
 
 int main()
 {
-    
     display_menu();
     
     return 0;

@@ -17,13 +17,13 @@ protected:
     std::string username;
     std::string email;
     std::string password;
-    unsigned long balance;
-    unsigned int matches_won;
-    unsigned int matches_played;
+    long balance;
+    int matches_won;
+    int matches_played;
     double win_percentage;
 public:
-    Account(std::string name = def_name, std::string username = def_username, std::string email = def_email, std::string password = def_password, unsigned long balance = zero,
-            unsigned int matches_won = zero, unsigned int matches_played = zero, double win_percentage = hundred);
+    Account(std::string name = def_name, std::string username = def_username, std::string email = def_email, std::string password = def_password, long balance = zero,
+            int matches_won = zero, int matches_played = zero, double win_percentage = hundred);
     ~Account() = default;
     
     void add_to_database();

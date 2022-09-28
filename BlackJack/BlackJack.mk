@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=MIHNEAANDREIDINU
-Date                   :=26/09/2022
+Date                   :=28/09/2022
 CodeLitePath           :="D:/Program Files/CodeLite"
 LinkerName             :=D:/MinGW/mingw64/bin/g++.exe
 SharedObjectLinkerName :=D:/MinGW/mingw64/bin/g++.exe -shared -fPIC
@@ -62,7 +62,7 @@ AS       := D:/MinGW/mingw64/bin/as.exe
 ## User defined environment variables
 ##
 CodeLiteDir:=D:\Program Files\CodeLite
-Objects0=$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) $(IntermediateDirectory)/Player.cpp$(ObjectSuffix) $(IntermediateDirectory)/Account.cpp$(ObjectSuffix) $(IntermediateDirectory)/Deck.cpp$(ObjectSuffix) $(IntermediateDirectory)/Blackjack.cpp$(ObjectSuffix) $(IntermediateDirectory)/main.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) $(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IntermediateDirectory)/Account.cpp$(ObjectSuffix) $(IntermediateDirectory)/Deck.cpp$(ObjectSuffix) $(IntermediateDirectory)/Blackjack.cpp$(ObjectSuffix) $(IntermediateDirectory)/Player.cpp$(ObjectSuffix) 
 
 
 
@@ -93,11 +93,11 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix): Dealer.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Dealer.cpp$(DependSuffix) -MM Dealer.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/Dealer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix): Dealer.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix) Dealer.cpp
+$(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
 $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix): I_Printable.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/I_Printable.cpp$(DependSuffix) -MM I_Printable.cpp
@@ -105,11 +105,11 @@ $(IntermediateDirectory)/I_Printable.cpp$(ObjectSuffix): I_Printable.cpp
 $(IntermediateDirectory)/I_Printable.cpp$(PreprocessSuffix): I_Printable.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/I_Printable.cpp$(PreprocessSuffix) I_Printable.cpp
 
-$(IntermediateDirectory)/Player.cpp$(ObjectSuffix): Player.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Player.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Player.cpp$(DependSuffix) -MM Player.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/Player.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Player.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Player.cpp$(PreprocessSuffix): Player.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Player.cpp$(PreprocessSuffix) Player.cpp
+$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix): Dealer.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Dealer.cpp$(DependSuffix) -MM Dealer.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/Dealer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Dealer.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix): Dealer.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Dealer.cpp$(PreprocessSuffix) Dealer.cpp
 
 $(IntermediateDirectory)/Account.cpp$(ObjectSuffix): Account.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Account.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Account.cpp$(DependSuffix) -MM Account.cpp
@@ -129,11 +129,11 @@ $(IntermediateDirectory)/Blackjack.cpp$(ObjectSuffix): Blackjack.cpp
 $(IntermediateDirectory)/Blackjack.cpp$(PreprocessSuffix): Blackjack.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Blackjack.cpp$(PreprocessSuffix) Blackjack.cpp
 
-$(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
-	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
+$(IntermediateDirectory)/Player.cpp$(ObjectSuffix): Player.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Player.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/Player.cpp$(DependSuffix) -MM Player.cpp
+	$(CXX) $(IncludePCH) $(SourceSwitch) "D:/C++/Projects/BlackJack/BlackJack/Player.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Player.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Player.cpp$(PreprocessSuffix): Player.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Player.cpp$(PreprocessSuffix) Player.cpp
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

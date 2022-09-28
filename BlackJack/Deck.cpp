@@ -28,6 +28,11 @@ void Deck::print(std::ostream &os) const {
     
 }
 
-std::pair<int, char> Deck::draw_card(size_t card_no) {
-    return cards.at(card_no);
+std::pair<int, char> Deck::draw_card() {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+
+    /* using nano-seconds instead of seconds */
+    srand((time_t)ts.tv_nsec);
+    return cards.at(rand() % 52 + 1);
 }

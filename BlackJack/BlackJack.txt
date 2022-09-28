@@ -1,1 +1,1 @@
-Debug/Dealer.cpp.o Debug/I_Printable.cpp.o Debug/Player.cpp.o Debug/Account.cpp.o Debug/Deck.cpp.o Debug/Blackjack.cpp.o Debug/main.cpp.o   
+Debug/main.cpp.o Debug/I_Printable.cpp.o Debug/Dealer.cpp.o Debug/Account.cpp.o Debug/Deck.cpp.o Debug/Blackjack.cpp.o Debug/Player.cpp.o   
