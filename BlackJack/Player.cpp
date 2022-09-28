@@ -3,7 +3,6 @@
 Player::Player(Account account, std::pair<int, char> hand, int no_points)
     : account{account}, hand {def_hand}, no_points {zero}
 {
-    std::cout << account << " " << "Player succesfully logged in!\n";
 }
 
 Account Player::account_info() {
@@ -29,14 +28,25 @@ std::vector<std::pair<int, char>> Player::get_hand() {
     return hand;
 }
 
+
 int Player::get_total_points() {
     int sum{};
     
     if (hand.size() == 0)
         return 0;
     
-    for(size_t i = 0; i < hand.size(); i++)
-        sum += hand.at(i).first;
+    for(size_t i = 0; i < hand.size(); i++) {
+        if(hand.at(i).first == 11 && no_points + 11 <= 21)
+            sum += hand.at(i).first;
+        else if (hand.at(i).first == 11 && no_points + 11 > 21) {
+            sum += 1;
+            no_points = sum;
+        }
+        else if (hand.at(i).first <= 10)
+            sum += hand.at(i).first;
+        else 
+            sum += 10;
+    }
         
     return sum;
 }
@@ -51,4 +61,5 @@ void Player::add_points(int points_to_add) {
 
 void Player::reset_hand() {
     hand.clear();
+    no_points = 0;
 }

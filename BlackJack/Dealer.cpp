@@ -22,23 +22,35 @@ void Dealer::add_points(int points_to_add) {
 }
 
 int Dealer::get_total_points() {
+    int sum{};
+    
     if (hand.size() == 0)
         return 0;
     
     for(size_t i = 0; i < hand.size(); i++) {
-        if(hand.at(i).first <= 10)
-            add_points(hand.at(i).first);
-        else
-            add_points(10);
+        if(hand.at(i).first == 11 && no_points + 11 <= 21)
+            sum += hand.at(i).first;
+        else if (hand.at(i).first == 11 && no_points + 11 >= 21){
+            sum += 1;
+            no_points = sum;
+        }
+        else if (hand.at(i).first <= 10)
+            sum += hand.at(i).first;
+        else 
+            sum += 10;
     }
         
-    return no_points;
+    return sum;
 }
 
 int Dealer::get_first_card_points() {
-    return hand.at(0).first;
+    if(hand.at(0).first >11)
+        return 10;
+    else
+        return hand.at(0).first;
 }
 
 void Dealer::reset_hand() {
     hand.clear();
+    no_points = 0;
 }

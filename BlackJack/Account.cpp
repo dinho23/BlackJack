@@ -15,8 +15,8 @@ void Account::update_win_percentage() {
 void Account::print(std::ostream &os) const {
     os.precision(2);
     os << std::fixed;
-    os << "Account details:\nName: " << name << "\nUsername: " << username << "\nBallance: " << balance << "\nMatches won: " << matches_won << "\nMatches played: " << matches_played <<
-        "\nWin Percentage: " << win_percentage <<"%\n";
+    os << "\nAccount details:\nName: " << name << "\nUsername: " << username << "\nBallance: " << balance << "\nMatches won: " << matches_won << "\nMatches played: " << matches_played <<
+        "\nWin Percentage: " << win_percentage <<"%\n\n";
 }
 
 

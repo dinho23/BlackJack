@@ -17,20 +17,18 @@ void display_menu() {
     size_t logged_in {0};
     Player player = Player();
     
-    std::cout << in;
-    
     std::cout << "Welcome!\n\nWhat would you like to do:\n";
     
     do {
         if (logged_in == 0) {
             std::cout << "1. Log in\n";
-            std::cout << "2. Create an account\n";
+            std::cout << "2. Create an account\n\n";
         }
         else {
             std::cout << player.account_info();
             std::cout << "1. Play blackjack\n";
         }
-        std::cout << "0. Exit\n";
+        std::cout << "0. Exit\n\n";
     
         std::cin >> in;
     

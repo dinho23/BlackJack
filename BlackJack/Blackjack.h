@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Deck.h"
 #include "Dealer.h"
+#include <thread>
+#include <chrono>
 
 class Blackjack
 {
@@ -19,9 +21,11 @@ public:
     void play(Player &player);
     void deposit(Player &player);
     void withdraw(Player &player);
-    void show_table(Player &player, Dealer &dealer);
+    void show_table(Player &player, Dealer &dealer, unsigned int amount);
     std::pair<int, char> draw_cards();
     void reset_hand();
+    void show_hands(Player &player, Dealer &dealer, bool first);
+    void dealers_turn(Player &player, Dealer &dealer);
 };
 
 #endif // _BLACKJACK_H_

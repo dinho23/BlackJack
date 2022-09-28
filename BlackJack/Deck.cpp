@@ -10,7 +10,7 @@ Deck::Deck()
     simbol.push_back('S');
     simbol.push_back('C');
     
-    for(size_t i=1; i<14; i++) {
+    for(size_t i=2; i<15; i++) {
         for(size_t j=0; j<4; j++) {
            c = std::make_pair(i,simbol[j]);
            cards.push_back(c);
@@ -34,5 +34,5 @@ std::pair<int, char> Deck::draw_card() {
 
     /* using nano-seconds instead of seconds */
     srand((time_t)ts.tv_nsec);
-    return cards.at(rand() % 52 + 1);
+    return cards.at(rand() % 51);
 }
