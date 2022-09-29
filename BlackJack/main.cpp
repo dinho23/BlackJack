@@ -37,7 +37,6 @@ void display_menu() {
         else if (in == '2' && logged_in == 0)
             create_acc(player, logged_in);
         else if (in == '1' && logged_in == 1) {
-            std::cout << player.account_info();
             Deck deck;
             Dealer dealer;
             Blackjack game = Blackjack(deck, dealer, player);
@@ -166,7 +165,41 @@ void login(Player &player, size_t &logged_in) {
 
 int main()
 {
+//    Player player;
+//    Deck deck;
+//    player.reset_hand();
+//    player.set_card(deck.draw_card());
+//    player.set_card(deck.draw_card());
+//    for (int i=0; i<player.get_hand().size(); i++) {
+//        std::cout << player.get_card(i).first << "-" << player.get_card(i).second << "; ";
+//        player.add_points(player.get_card(i).first);
+//    }
+//    std::cout << "\n" << player.get_points() << "\n";
+//    std::cout << "\n" << player.get_total_points() << "\n";
+    
+//    Dealer player;
+//    player.add_points(8);
+//    player.set_card(std::make_pair(8,'S'));
+//    std::cout << player.get_points() << " " << player.get_total_points() << "\n";
+//    player.add_points(2);
+//    player.set_card(std::make_pair(2,'S'));
+//    std::cout << player.get_points() << " " << player.get_total_points() << "\n";
+//    player.set_card(std::make_pair(11,'S'));
+//    player.add_points(11);
+//    std::cout << player.get_points() << " " << player.get_total_points() << "\n";
+    
+    
+//    Deck deck;
+//    std::cout << deck;
+    
     display_menu();
+    
+//    Deck deck;
+//    Player player;
+//    Dealer dealer;
+//    Blackjack bj(deck, dealer, player);
+//    
+//    bj.play(player);
     
     return 0;
 }

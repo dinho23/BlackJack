@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Deck.h"
 #include "Dealer.h"
+#include <string>
 #include <thread>
 #include <chrono>
 
@@ -25,7 +26,8 @@ public:
     std::pair<int, char> draw_cards();
     void reset_hand();
     void show_hands(Player &player, Dealer &dealer, bool first);
-    void dealers_turn(Player &player, Dealer &dealer);
+    void dealers_turn(Player &player, Dealer &dealer, int amount);
+    std::string face_cards(int value, char symbol);
 };
 
 #endif // _BLACKJACK_H_

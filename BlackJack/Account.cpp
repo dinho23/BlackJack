@@ -49,3 +49,13 @@ void Account::add_to_database() {
     of << '\n' << name << " " << username << " " << email << " " << balance << " " << matches_won << " " << matches_played << " " << password;
     of.close();
 }
+
+void Account::add_match(bool won) {
+    matches_played++;
+    if (won)
+        matches_won++;
+}
+
+double Account::get_win_percentage() {
+    return win_percentage;
+}

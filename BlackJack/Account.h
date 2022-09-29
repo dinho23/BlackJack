@@ -32,6 +32,8 @@ public:
     long check_balance();
     bool withdraw(long amount);
     virtual void print(std::ostream &os) const override;
+    void add_match(bool won);
+    double get_win_percentage();
 
 };
 

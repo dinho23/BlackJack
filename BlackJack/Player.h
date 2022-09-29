@@ -26,6 +26,8 @@ public:
     int get_points();
     void add_points(int points_to_add);
     void reset_hand();
+    void set_points(int points_to_set);
+    void add_match(bool won);
 
 };
 
