@@ -239,6 +239,10 @@ void Blackjack::play(Player &player) {
     char in{};
     
     do {
+        
+        player.account_info().delete_from_database();
+        player.account_info().add_to_database();
+        
         std::cout << "Balance: " << player.account_info().check_balance() << "\t\t" << "Win percentage:" << player.account_info().get_win_percentage() << "\n";
         std::cout << "1. Begin a match\n";
         std::cout << "2. Deposit money on your account\n";

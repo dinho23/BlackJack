@@ -25,6 +25,8 @@ void display_menu() {
             std::cout << "2. Create an account\n\n";
         }
         else {
+            player.account_info().delete_from_database();
+            player.account_info().add_to_database();
             std::cout << player.account_info();
             std::cout << "1. Play blackjack\n";
         }

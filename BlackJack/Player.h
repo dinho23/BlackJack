@@ -28,7 +28,6 @@ public:
     void reset_hand();
     void set_points(int points_to_set);
     void add_match(bool won);
-
 };
 
 #endif // _PLAYER_H_

@@ -34,6 +34,7 @@ public:
     virtual void print(std::ostream &os) const override;
     void add_match(bool won);
     double get_win_percentage();
+    void delete_from_database();
 
 };
 
