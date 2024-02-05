@@ -12,22 +12,37 @@
 
 Mainframe::Mainframe(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
+    SetMinSize(wxSize(400, 400));
+
     LoadImages();
     notebook = new wxSimplebook(this, wxID_ANY);
 
     firstPanel = new wxPanel(notebook);
     firstPanel->SetBackgroundColour(wxColour(128, 128, 128));
 
-    playButton = new wxButton(firstPanel, wxID_ANY, "Play BlackJack", wxPoint(350, 200), wxSize(100, 50));
-    quitButton = new wxButton(firstPanel, wxID_ANY, "Quit", wxPoint(350, 275), wxSize(100, 50));
+    playButton = new wxButton(firstPanel, wxID_ANY, "Play BlackJack", wxDefaultPosition, wxSize(100, 50));
+    quitButton = new wxButton(firstPanel, wxID_ANY, "Quit", wxDefaultPosition, wxSize(100, 50));
 
     playButton->Bind(wxEVT_BUTTON, &Mainframe::OnPlayPressed, this);
     quitButton->Bind(wxEVT_BUTTON, &Mainframe::OnQuitPressed, this);
+    
+    AddSizerToPanel(firstPanel, {playButton, quitButton});
 
     notebook->AddPage(firstPanel, "Main Menu");
+}
 
-    SetSizer(new wxBoxSizer(wxVERTICAL));
-    GetSizer()->Add(notebook, 1, wxEXPAND);
+void Mainframe::AddSizerToPanel(wxPanel* frame, std::vector<wxControl*> controls)
+{
+    wxBoxSizer* s1 = new wxBoxSizer(wxVERTICAL);
+
+    s1->AddStretchSpacer(1);
+    for (auto control : controls)
+    {
+        s1->Add(control, 0, wxALIGN_CENTER | wxALL, 5);
+    }
+    s1->AddStretchSpacer(1);
+
+    frame->SetSizerAndFit(s1);
 }
 
 void Mainframe::OnQuitPressed(wxCommandEvent& evt)
@@ -52,6 +67,8 @@ void Mainframe::OnPlayPressed(wxCommandEvent& evt)
     createAccount->Bind(wxEVT_BUTTON, &Mainframe::OnCreateAccountPressed, this);
     backButton->Bind(wxEVT_BUTTON, &Mainframe::OnBackPressed, this);
 
+    AddSizerToPanel(loginPanel, { loginButton, createAccount, backButton });
+
     notebook->AddPage(loginPanel, "Login");
     notebook->ShowNewPage(loginPanel);
 }
@@ -75,6 +92,8 @@ void Mainframe::CreateAccountDetailsPanel()
     enterCredentials = new wxButton(credentialsPanel, wxID_ANY, "Enter", wxPoint(380, 275), wxSize(50, -1));
 
     enterCredentials->Bind(wxEVT_BUTTON, &Mainframe::OnCredentialsEntered, this);
+
+    AddSizerToPanel(credentialsPanel, { enterUsername, usernameBox, enterPassword,  passwordBox, enterCredentials });
 
     notebook->AddPage(credentialsPanel, "Credentials");
     notebook->ShowNewPage(credentialsPanel);
@@ -195,6 +214,8 @@ void Mainframe::ShowBeginGamePanel()
     depositButton->Bind(wxEVT_BUTTON, &Mainframe::DepositMoney, this);
     withdrawButton->Bind(wxEVT_BUTTON, &Mainframe::WithdrawMoney, this);
 
+    AddSizerToPanel(gameOptionsPanel, { beginButton, depositButton, withdrawButton });
+
     notebook->AddPage(gameOptionsPanel, "GameOptions");
     notebook->ShowNewPage(gameOptionsPanel);
 }
@@ -210,15 +231,15 @@ void Mainframe::OnBeginGame(wxCommandEvent& evt)
     playerPoints = new wxStaticText(gamePanel, wxID_ANY, "", wxPoint(350, 425));
     drawButton = new wxButton(gamePanel, wxID_ANY, "Draw", wxPoint(310, 280), wxSize(50, -1));
     stopButton = new wxButton(gamePanel, wxID_ANY, "Stop", wxPoint(365, 280), wxSize(50, -1));
-    
+
+    drawButton->Show(true);
+    stopButton->Show(true);
     InitGame();
 
     std::string dealerPointsString = "Dealer: " + std::to_string(dealer->get_total_points(true));
     std::string playerPointsString = "You: " + std::to_string(player->get_points());
     dealerPoints->SetLabel(dealerPointsString);
     playerPoints->SetLabel(playerPointsString);
-    drawButton->Show(true);
-    stopButton->Show(true);
 
     drawButton->Bind(wxEVT_BUTTON, &Mainframe::OnDrawCard, this);
     stopButton->Bind(wxEVT_BUTTON, &Mainframe::OnStopEntered, this);
@@ -358,10 +379,10 @@ void Mainframe::InitGame()
     player->reset_hand();
     dealer->reset_hand();
 
-    //player->set_card(deck.draw_card());
-    //player->set_card(deck.draw_card());
-    player->set_card(0);
-    player->set_card(13);
+    player->set_card(deck.draw_card());
+    player->set_card(deck.draw_card());
+    //player->set_card(0);
+    //player->set_card(12);
     dealer->set_card(deck.draw_card());
     dealer->set_card(deck.draw_card());
     //dealer->set_card(0);
@@ -385,8 +406,6 @@ void Mainframe::InitGame()
        
     if (player->get_points() == 21)
     {
-        drawButton->Show(false);
-        stopButton->Show(false);
         wxStaticText* naturalBlackJack = new wxStaticText(gamePanel, wxID_ANY, "Natural Blackjack!\nCongratulations!", wxPoint(320, 240));
         player->add_match(1);
         PlayAgainOrReturn();
@@ -471,11 +490,11 @@ void Mainframe::DrawPlayerCards()
 
     wxClientDC dc(gamePanel);
 
-    int i{0};
+    int i{ 0 };
     for (const auto& card : player->get_hand())
     {
         int cardValue{ card };
-        dc.DrawBitmap(cards.at(card), 200 + i*110, 445, true);
+        dc.DrawBitmap(cards.at(card), 200 + i * 110, 445, true);
         i++;
     }
 }
@@ -599,7 +618,6 @@ bool Mainframe::VerifyAccountDetails()
     in.close();
     return false;
 }
-
 
 void Mainframe::UpdateAcoountInfo()
 {

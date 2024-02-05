@@ -5,4 +5,5 @@ Bob bob bob@gmail.com 100 0 0 bob
 Mark mark mark@mark.com 100 0 0 mark
 John john john@john.com 100 0 0 john
 Jack jack jack@gmail.com 100 10 20 jack
+test2 test2 test2@gmail.com 100 0 0 test2
 Tester test test@gmail.com 5579 40 81 test

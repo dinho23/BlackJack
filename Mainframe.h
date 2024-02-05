@@ -61,6 +61,8 @@ private:
 	Dealer* dealer;
 	Deck deck;
 
+	void AddSizerToPanel(wxPanel* frame, std::vector<wxControl*> controls);
+
 	void OnQuitPressed(wxCommandEvent& evt);
 	void OnPlayPressed(wxCommandEvent& evt);
 	void OnLoginPressed(wxCommandEvent& evt);
