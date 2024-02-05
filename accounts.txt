@@ -1,0 +1,8 @@
+Carl carl carl@gmail.com 77 0 1 carl
+Zack zack zack@gmail.com 100 0 0 zack
+Robert robert robert@gmail.com 100 0 0 robert
+Bob bob bob@gmail.com 100 0 0 bob
+Mark mark mark@mark.com 100 0 0 mark
+John john john@john.com 100 0 0 john
+Jack jack jack@gmail.com 100 10 20 jack
+Tester test test@gmail.com 5579 40 81 test
