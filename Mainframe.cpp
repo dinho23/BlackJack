@@ -222,18 +222,37 @@ void Mainframe::ShowBeginGamePanel()
 
 void Mainframe::OnBeginGame(wxCommandEvent& evt)
 {
-    gamePanel = new wxPanel(notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE);
-    gamePanel->SetBackgroundColour(wxColour(128, 128, 128));
+    wholeGamePanel = new wxPanel(notebook);
+    wholeGamePanel->SetBackgroundColour(wxColour(128, 128, 128));
+
+
+    topGamePanel = new wxPanel(wholeGamePanel, wxID_ANY, wxDefaultPosition, wxSize(-1, 150));
+    topGamePanel->SetBackgroundColour(wxColour(100, 100, 200));
+    middleGamePanel = new wxPanel(wholeGamePanel, wxID_ANY, wxDefaultPosition, wxSize(-1, 300));
+    middleGamePanel->SetBackgroundColour(wxColour(100, 200, 100));
+    bottomGamePanel = new wxPanel(wholeGamePanel, wxID_ANY, wxDefaultPosition, wxSize(-1, 150));
+    bottomGamePanel->SetBackgroundColour(wxColour(200, 100, 100));
+
+    gameSizer = new wxBoxSizer(wxVERTICAL);
+    topSizer = new wxBoxSizer(wxHORIZONTAL);
+    middleSizer = new wxBoxSizer(wxHORIZONTAL);
+    bottomSizer = new wxBoxSizer(wxHORIZONTAL);
+    gameSizer->Add(topGamePanel, 1, wxEXPAND);
+    gameSizer->Add(middleGamePanel, 2, wxEXPAND);
+    gameSizer->Add(bottomGamePanel, 1, wxEXPAND);
 
     dealer = new Dealer();
 
-    dealerPoints = new wxStaticText(gamePanel, wxID_ANY, "", wxPoint(350, 160));
-    playerPoints = new wxStaticText(gamePanel, wxID_ANY, "", wxPoint(350, 425));
-    drawButton = new wxButton(gamePanel, wxID_ANY, "Draw", wxPoint(310, 280), wxSize(50, -1));
-    stopButton = new wxButton(gamePanel, wxID_ANY, "Stop", wxPoint(365, 280), wxSize(50, -1));
+    gameResult = new wxStaticText(middleGamePanel, wxID_ANY, "");
+    dealerPoints = new wxStaticText(middleGamePanel, wxID_ANY, "", wxPoint(350, 160));
+    playerPoints = new wxStaticText(middleGamePanel, wxID_ANY, "", wxPoint(350, 425));
+    drawButton = new wxButton(middleGamePanel, wxID_ANY, "Draw", wxPoint(310, 280), wxSize(50, -1));
+    stopButton = new wxButton(middleGamePanel, wxID_ANY, "Stop", wxPoint(365, 280), wxSize(50, -1));
+    backToStartGame = new wxButton(middleGamePanel, wxID_ANY, "Return", wxPoint(350, 280), wxSize(50, -1));
 
     drawButton->Show(true);
     stopButton->Show(true);
+    backToStartGame->Show(false);
     InitGame();
 
     std::string dealerPointsString = "Dealer: " + std::to_string(dealer->get_total_points(true));
@@ -244,11 +263,25 @@ void Mainframe::OnBeginGame(wxCommandEvent& evt)
     drawButton->Bind(wxEVT_BUTTON, &Mainframe::OnDrawCard, this);
     stopButton->Bind(wxEVT_BUTTON, &Mainframe::OnStopEntered, this);
 
-    notebook->AddPage(gamePanel, "Gameplay");
-    notebook->ShowNewPage(gamePanel);
-
     DrawDealerCards(true);
+
+    middleSizer = new wxBoxSizer(wxVERTICAL);
+    middleSizer->AddStretchSpacer(1);
+    middleSizer->Add(gameResult, 0, wxALIGN_CENTER);
+    middleSizer->Add(dealerPoints, 0, wxALIGN_CENTER);
+    middleSizer->Add(drawButton, 0, wxALIGN_CENTER);
+    middleSizer->Add(stopButton, 0, wxALIGN_CENTER);
+    middleSizer->Add(backToStartGame, 0, wxALIGN_CENTER);
+    middleSizer->Add(playerPoints, 0, wxALIGN_CENTER);
+    middleSizer->AddStretchSpacer(1);
+    middleGamePanel->SetSizerAndFit(middleSizer);
+
     DrawPlayerCards();
+
+    wholeGamePanel->SetSizerAndFit(gameSizer);
+
+    notebook->AddPage(wholeGamePanel, "Gameplay");
+    notebook->ShowNewPage(wholeGamePanel);
 }
 
 void Mainframe::LoadImages()
@@ -278,6 +311,14 @@ void Mainframe::LoadImages()
 
 void Mainframe::OnStopEntered(wxCommandEvent& evt)
 {
+    RemoveBackCardAndEnterDealersTurn();
+}
+
+void Mainframe::RemoveBackCardAndEnterDealersTurn()
+{
+
+    topSizer->Hide(2);
+    topSizer->Detach(2);
     DealersTurn();
 }
 
@@ -285,15 +326,18 @@ void Mainframe::PrintDealerPointsAndCards()
 {
     std::string dealerPointsString = "Dealer: " + std::to_string(dealer->get_points());
     dealerPoints->SetLabel(dealerPointsString);
-    dealerPoints->Update();
-    DrawDealerCards(false);
+    dealerPoints->Update(); 
+
+
+    wxBitmap cardBitmap = cards.at(dealer->get_hand().back());
+    wxStaticBitmap* cardImage = new wxStaticBitmap(topGamePanel, wxID_ANY, cardBitmap);
+    topSizer->Insert(dealer->get_hand().size(), cardImage, 0, wxALIGN_CENTER | wxALL, 5);
 }
 
 void Mainframe::DealersTurn()
 {
-    wxStaticText* gameResult = new wxStaticText(gamePanel, wxID_ANY, "", wxPoint(340, 260));
-    wxStaticText* gameCurrentState = new wxStaticText(gamePanel, wxID_ANY, "", wxPoint(340, 240));
-    
+    wxStaticText* gameCurrentState = new wxStaticText(middleGamePanel, wxID_ANY, "", wxPoint(340, 240));
+
     drawButton->Show(false);
     stopButton->Show(false);
 
@@ -313,6 +357,8 @@ void Mainframe::DealersTurn()
     }
     
     PrintDealerPointsAndCards();
+    gameSizer->Layout();
+    notebook->Update();
 
     if (dealer->get_points() == 21) {
         gameResult->SetLabel("Dealer has a natural Blackjack!");
@@ -351,6 +397,8 @@ void Mainframe::DealersTurn()
             }
 
             PrintDealerPointsAndCards();
+            gameSizer->Layout();
+            notebook->Update();
 
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } while (dealer->get_points() <= 16);
@@ -381,8 +429,8 @@ void Mainframe::InitGame()
 
     player->set_card(deck.draw_card());
     player->set_card(deck.draw_card());
-    //player->set_card(0);
-    //player->set_card(12);
+    //player->set_card(1);
+    //player->set_card(8);
     dealer->set_card(deck.draw_card());
     dealer->set_card(deck.draw_card());
     //dealer->set_card(0);
@@ -406,7 +454,7 @@ void Mainframe::InitGame()
        
     if (player->get_points() == 21)
     {
-        wxStaticText* naturalBlackJack = new wxStaticText(gamePanel, wxID_ANY, "Natural Blackjack!\nCongratulations!", wxPoint(320, 240));
+        gameResult->SetLabel("Natural Blackjack!\nCongratulations!");
         player->add_match(1);
         PlayAgainOrReturn();
     }
@@ -445,17 +493,21 @@ void Mainframe::OnDrawCard(wxCommandEvent& evt)
         player->get_total_points();
     }
 
-    DrawDealerCards(true);
-    DrawPlayerCards();
+    wxBitmap cardBitmap = cards.at(player->get_hand().back());
+    wxStaticBitmap* cardImage = new wxStaticBitmap(bottomGamePanel, wxID_ANY, cardBitmap);
+    bottomSizer->Insert(player->get_hand().size(), cardImage, 0, wxALIGN_CENTER | wxALL, 5);
+    bottomGamePanel->SetSizerAndFit(bottomSizer);
 
     std::string playerPointsString = "You: " + std::to_string(player->get_points());
     playerPoints->SetLabel(playerPointsString);
 
+    gameSizer->Layout();
+    notebook->Update();
     if (player->get_points() > 21) {
         player->get_total_points();
         if (player->get_points() > 21)
         {
-            wxStaticText* youLostText = new wxStaticText(gamePanel, wxID_ANY, "You lost...", wxPoint(340, 260));
+            gameResult->SetLabel("You lost...");
             player->add_match(0);
             PlayAgainOrReturn();
         }
@@ -467,16 +519,20 @@ void Mainframe::OnDrawCard(wxCommandEvent& evt)
     }
     else if (player->get_points() == 21) 
     {
-        DealersTurn();
+        RemoveBackCardAndEnterDealersTurn();
     }
 }
 
 void Mainframe::PlayAgainOrReturn()
 {
-    wxButton* backToStartGame = new wxButton(gamePanel, wxID_ANY, "Return", wxPoint(350, 280), wxSize(50, -1));
+    backToStartGame->Show(true);
     backToStartGame->Bind(wxEVT_BUTTON, &Mainframe::ReloadGame, this);
+
     drawButton->Show(false);
     stopButton->Show(false);
+
+    gameSizer->Layout();
+    notebook->Update();
 }
 
 void Mainframe::ReloadGame(wxCommandEvent& evt)
@@ -486,38 +542,47 @@ void Mainframe::ReloadGame(wxCommandEvent& evt)
 
 void Mainframe::DrawPlayerCards()
 {
-    int numberOfCards = player->get_hand().size();
-
-    wxClientDC dc(gamePanel);
-
+    bottomSizer->AddStretchSpacer(1);
     int i{ 0 };
     for (const auto& card : player->get_hand())
     {
-        int cardValue{ card };
-        dc.DrawBitmap(cards.at(card), 200 + i * 110, 445, true);
+        wxBitmap cardBitmap = cards.at(card);
+        wxStaticBitmap* cardImage = new wxStaticBitmap(bottomGamePanel, wxID_ANY, cardBitmap);
+
+        bottomSizer->Add(cardImage, 0, wxALIGN_CENTER | wxALL, 5);
         i++;
     }
+    bottomSizer->AddStretchSpacer(1);
+    bottomGamePanel->SetSizerAndFit(bottomSizer);
 }
 
 void Mainframe::DrawDealerCards(bool showOneCardOnly)
 {
-    int numberOfCards = dealer->get_hand().size();
-
-    wxClientDC dc(gamePanel);
+    topSizer->AddStretchSpacer(1);
 
     if (showOneCardOnly)
     {
-        dc.DrawBitmap(cards.at(dealer->get_hand().at(0)), 200, 5, true);
-        dc.DrawBitmap(cards.at(52), 310, 5, true);
+        wxBitmap dealerCardBitmap = cards.at(dealer->get_hand().at(0));
+        wxBitmap holeCardBitmap = cards.at(52);
+
+        wxStaticBitmap* dealerCardImage = new wxStaticBitmap(topGamePanel, wxID_ANY, dealerCardBitmap);
+        wxStaticBitmap* holeCardImage = new wxStaticBitmap(topGamePanel, wxID_ANY, holeCardBitmap);
+
+        topSizer->Add(dealerCardImage, 0, wxALIGN_CENTRE | wxALL, 5);
+        topSizer->Add(holeCardImage, 0, wxALIGN_CENTER | wxALL, 5);
+        topSizer->AddStretchSpacer(1);
+        topGamePanel->SetSizerAndFit(topSizer);
+
         return;
     }
 
-    int i{ 0 };
     for (const auto& card : dealer->get_hand())
     {
-        int cardValue{ card };
-        dc.DrawBitmap(cards.at(card), 200 + i * 110, 5, true);
-        i++;
+        wxBitmap cardBitmap = cards.at(card);
+        wxStaticBitmap* cardImage = new wxStaticBitmap(topGamePanel, wxID_ANY, cardBitmap);
+
+        topSizer->Add(cardImage, 0, wxALIGN_CENTER | wxALL, 5);
+        topGamePanel->SetSizerAndFit(topSizer);
     }
 }
 

@@ -17,15 +17,25 @@ private:
 	wxSimplebook* notebook;
 
 	wxBoxSizer* gameSizer;
+	wxSizer* topSizer;
+	wxSizer* middleSizer;
+	wxSizer* bottomSizer;
 
 	std::vector<wxBitmap> cards;
+
+	wxPanel* dealerPanel;
+	wxPanel* playerPanel;
 
 	wxPanel* firstPanel;
 	wxPanel* loginPanel;
 	wxPanel* createAccountPanel;
 	wxPanel* credentialsPanel;
 	wxPanel* gameOptionsPanel;
-	wxPanel* gamePanel;
+
+	wxPanel* wholeGamePanel;
+	wxPanel* topGamePanel;
+	wxPanel* middleGamePanel;
+	wxPanel* bottomGamePanel;
 
 	wxButton* playButton;
 	wxButton* quitButton;
@@ -36,6 +46,7 @@ private:
 	wxButton* newAccountButton;
 	wxButton* drawButton;
 	wxButton* stopButton;
+	wxButton* backToStartGame;
 
 	wxTextCtrl* usernameBox;
 	wxTextCtrl* passwordBox;
@@ -50,6 +61,7 @@ private:
 	wxStaticText* accountDetailsText;
 	wxStaticText* playerPoints;
 	wxStaticText* dealerPoints;
+	wxStaticText* gameResult;
 
 	std::string username;
 	std::string firstName;
@@ -99,4 +111,5 @@ private:
 	void ReloadGame(wxCommandEvent& evt);
 	void DealersTurn();
 	void PlayAgainOrReturn();
+	void RemoveBackCardAndEnterDealersTurn();
 };
