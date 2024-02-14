@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mainframe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Account.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dealer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mainframe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Account.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dealer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="accounts.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Backs\Card-Back-06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Backs\Card-Back-01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Backs\Card-Back-02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Backs\Card-Back-03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Backs\Card-Back-04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Backs\Card-Back-05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c07.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c08.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c09.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\c13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d07.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d08.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d09.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\d13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h07.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h08.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h09.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\h13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s01.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s03.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s04.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s05.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s06.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s07.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s08.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s09.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s10.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s11.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s12.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Cards\Classic\s13.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
