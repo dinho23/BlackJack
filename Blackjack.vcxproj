@@ -232,9 +232,6 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="accounts.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="Backs\Card-Back-01.png" />
     <Image Include="Backs\Card-Back-02.png" />
     <Image Include="Backs\Card-Back-03.png" />
