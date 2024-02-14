@@ -1,4 +1,5 @@
 #include "Deck.h"
+#include <random>
 
 Deck::Deck()
 {
@@ -8,9 +9,13 @@ Deck::Deck()
     }
 }
 
-int Deck::draw_card() {
-    auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    srand(seed);
+#include <random>
 
-    return cards.at(rand() % 51);
+int Deck::draw_card() {
+    // Use a random number engine and a distribution
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 51); // Distribution for numbers between 0 and 51 (inclusive)
+
+    return cards.at(dis(gen)); // Generate a random index for cards vector
 }

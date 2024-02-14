@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstring>
 
-Account::Account(std::string name, std::string username, std::string email, std::string password, long balance, int matches_won, int matches_played, double win_percentage)
+Account::Account(std::string name, std::string username, std::string email, std::string password, double balance, int matches_won, int matches_played, double win_percentage)
     : name{ name }, username{ username }, email{ email }, password{ password }, balance{ balance }, matches_won{ matches_won }, matches_played{ matches_played }, win_percentage{ win_percentage } {
     if (matches_played > 0)
         update_win_percentage();
@@ -14,7 +14,7 @@ void Account::update_win_percentage() {
         win_percentage = (double)matches_won * 100 / matches_played;
 }
 
-bool Account::deposit(long amount) {
+bool Account::deposit(double amount) {
     if (amount < 0)
         return false;
     else {
@@ -23,7 +23,7 @@ bool Account::deposit(long amount) {
     }
 }
 
-bool Account::withdraw(long amount) {
+bool Account::withdraw(double amount) {
     std::cout << balance << " " << amount << "\n";
     if (amount < 0 || balance < amount)
         return false;
@@ -33,7 +33,7 @@ bool Account::withdraw(long amount) {
     }
 }
 
-long Account::check_balance() {
+double Account::check_balance() {
     return balance;
 }
 

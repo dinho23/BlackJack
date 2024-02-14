@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 #include <thread>
+#include <iomanip>
+#include <sstream>
 #include "Account.h"
 #include "Player.h"
 #include "Dealer.h"
@@ -13,6 +15,8 @@
 Mainframe::Mainframe(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
     SetMinSize(wxSize(400, 400));
+
+    db = new DatabaseManager();
 
     LoadImages();
     notebook = new wxSimplebook(this, wxID_ANY);
@@ -50,6 +54,8 @@ void Mainframe::OnQuitPressed(wxCommandEvent& evt)
     wxMessageDialog dialog(this, "Are you sure you want to quit?", "Quit", wxYES_NO | wxICON_QUESTION);
     int result = dialog.ShowModal();
     if (result == wxID_YES) {
+        db->closeDB();
+        delete db;
         Close();
     }
 }
@@ -149,50 +155,78 @@ void Mainframe::VerifyExistingAccount(wxCommandEvent& evt) {
 
     if (firstName.empty() || username.empty() || email.empty() || password.empty())
     {
-        wxMessageBox(wxT("No filed can be left empty, plase fill all the fields and try again!"), wxT("No empty fields"), wxICON_INFORMATION);
+        wxMessageBox(wxT("No field can be left empty, plase fill all the fields and try again!"), wxT("No empty fields"), wxICON_INFORMATION);
         return;
     }
     if (username.size() < 3) {
-        wxMessageBox(wxT("Username must have be at least 3 characters long, please try again"), wxT("Username too short"), wxICON_INFORMATION);
+        wxMessageBox(wxT("Username must be at least 3 characters long, please try again"), wxT("Username too short"), wxICON_INFORMATION);
+        return;
+    }
+    if (password.size() < 3) {
+        wxMessageBox(wxT("Password must be at least 3 characters long, please try again"), wxT("Password too short"), wxICON_INFORMATION);
         return;
     }
 
-    std::ifstream in;
-    in.open("accounts.txt");
-
-    if (!in) {
-        wxMessageBox(wxT("Failled to open the accounts database."), wxT("Database fail"), wxICON_INFORMATION);
-        Close();
+    if (db->isUsernameInUse(username))
+    {
+        wxMessageBox(wxT("Username already taken, please try another one."), wxT("Username taken"), wxICON_INFORMATION);
+        return;
+    }
+    if (db->isEmailInUse(email))
+    {
+        wxMessageBox(wxT("eMail already in use, please enter another one."), wxT("eMail taken"), wxICON_INFORMATION);
+        return;
+    }
+    if (ValidateEmail(email) == false)
+    {
+        wxMessageBox(wxT("Please enter a valid email address"), wxT("Invalid email"), wxICON_INFORMATION);
+        return;
     }
 
-    while (!in.eof()) {
-        std::getline(in, existing_name, ' ');
-        std::getline(in, existing_username, ' ');
-        std::getline(in, existing_email, ' ');
-        std::getline(in, existing_balance, ' ');
-        std::getline(in, existing_won, ' ');
-        std::getline(in, existing_played, ' ');
-        std::getline(in, existing_password);
 
-        if (existing_username == username) {
-            wxMessageBox(wxT("Username already taken, please try another one"), wxT("Username taken"), wxICON_INFORMATION);
-            return;
-        }
-        if (existing_email == email) {
-            wxMessageBox(wxT("eMail already taken, please try another one"), wxT("eMail taken"), wxICON_INFORMATION);
-            return;
-        }
-    }
 
-    in.close();
+    db->insertLoginInfo(username, password);
+
+    int userID = db->getUserIdByUsername(username);
+    db->insertAccountDetails(userID, firstName, email, 100.0, 0.0, 0.0);
 
     CreateAccount();
 
     ShowBeginGamePanel();
 }
 
+bool Mainframe::ValidateEmail(const std::string& email) {
+    if (email.empty()) {
+        return false;
+    }
+
+    if (std::isalpha(email.at(0)) == 0) {
+        return false;
+    }
+
+    auto atIndex = email.find('@');
+    if (atIndex == std::string::npos) {
+        return false;
+    }
+
+    auto dotIndex = email.find('.', atIndex);
+    if (dotIndex == std::string::npos || dotIndex == atIndex + 1) {
+        return false;
+    }
+
+    if (dotIndex - atIndex <= 1) {
+        return false;
+    }
+    
+    if (dotIndex == email.length() - 1) {
+        return false;
+    }
+
+    return true;
+}
+
 void Mainframe::CreateAccount() {
-    loggedInAccount = new Account(firstName, username, email, password, 100);
+    loggedInAccount = new Account(firstName, username, email, password, 100.0);
     player = new Player(*loggedInAccount);
 
 }
@@ -202,26 +236,77 @@ void Mainframe::ShowBeginGamePanel()
     gameOptionsPanel = new wxPanel(notebook);
     gameOptionsPanel->SetBackgroundColour(wxColour(128, 128, 128));
 
-    UpdateAcoountInfo();
-
     accountDetailsText = new wxStaticText(gameOptionsPanel, wxID_ANY, GetAccountDetails(), wxPoint(10, 10));
+    accountDetailsText->SetLabel(GetAccountDetails());
 
     wxButton* beginButton = new wxButton(gameOptionsPanel, wxID_ANY, "Begin a match", wxPoint(350, 200), wxSize(100, 50));
     wxButton* depositButton = new wxButton(gameOptionsPanel, wxID_ANY, "Deposit money", wxPoint(350, 275), wxSize(100, 50));
     wxButton* withdrawButton = new wxButton(gameOptionsPanel, wxID_ANY, "Withdraw money", wxPoint(350, 350), wxSize(100, 50));
 
-    beginButton->Bind(wxEVT_BUTTON, &Mainframe::OnBeginGame, this);
+    betSlider = new wxSlider(gameOptionsPanel, wxID_ANY, 1, 1, 2, wxDefaultPosition, wxSize(200, -1), wxSL_VALUE_LABEL);
+    betButton = new wxButton(gameOptionsPanel, wxID_ANY, "Bet");
+    betSlider->Show(false);
+    betButton->Show(false);
+
+
+    depositSlider = new wxSlider(gameOptionsPanel, wxID_ANY, 100, 100, 10000, wxDefaultPosition, wxSize(200, -1), wxSL_VALUE_LABEL);
+    depositEnterButton = new wxButton(gameOptionsPanel, wxID_ANY, "Deposit");
+    depositSlider->Show(false);
+    depositEnterButton->Show(false);
+
+
+    withdrawSlider = new wxSlider(gameOptionsPanel, wxID_ANY, 1, 1, 2, wxDefaultPosition, wxSize(200, -1), wxSL_VALUE_LABEL);
+    withdrawEnterButton = new wxButton(gameOptionsPanel, wxID_ANY, "Withdraw");
+    withdrawSlider->Show(false);
+    withdrawEnterButton->Show(false);
+
+    beginButton->Bind(wxEVT_BUTTON, &Mainframe::ShowBettingOptions, this);
     depositButton->Bind(wxEVT_BUTTON, &Mainframe::DepositMoney, this);
     withdrawButton->Bind(wxEVT_BUTTON, &Mainframe::WithdrawMoney, this);
 
-    AddSizerToPanel(gameOptionsPanel, { beginButton, depositButton, withdrawButton });
+    AddSizerToPanel(gameOptionsPanel, { beginButton, betSlider, betButton, depositButton, depositSlider, depositEnterButton, withdrawButton, withdrawSlider, withdrawEnterButton });
 
     notebook->AddPage(gameOptionsPanel, "GameOptions");
     notebook->ShowNewPage(gameOptionsPanel);
 }
 
+void Mainframe::ShowBettingOptions(wxCommandEvent& evt)
+{
+    withdrawSlider->Show(false);
+    withdrawEnterButton->Show(false);
+    depositSlider->Show(false);
+    depositEnterButton->Show(false);
+
+    if (db->getBalance(username) < 5)
+    {
+        gameOptionsPanel->Layout();
+        wxMessageBox("You don't have enough, make a new deposit in order to play", "Insufficient funds");
+        return;
+    }
+
+    if (betSlider->Show())
+    {
+        betSlider->SetValue(1);
+        betSlider->SetMax(db->getBalance(username));
+        betSlider->Show(true);
+        betButton->Show(true);
+        betSlider->Refresh();
+    }
+    else
+    {
+        betSlider->Show(false);
+        betButton->Show(false);
+    }
+
+    gameOptionsPanel->Layout();
+    betButton->Bind(wxEVT_BUTTON, &Mainframe::OnBeginGame, this);
+}
+
 void Mainframe::OnBeginGame(wxCommandEvent& evt)
 {
+    ammountBet = betSlider->GetValue();
+    db->withdrawFromBalance(username, ammountBet);
+
     wholeGamePanel = new wxPanel(notebook);
     wholeGamePanel->SetBackgroundColour(wxColour(128, 128, 128));
 
@@ -365,17 +450,20 @@ void Mainframe::DealersTurn()
         if (dealer->get_points() == player->get_points()) {
             gameResult->SetLabel("It's a Blackjack draw");
             player->add_match(0);
+            db->depositToBalance(username, ammountBet);
+            db->increaseGamesPlayed(username, false);
         }
         else {
             gameResult->SetLabel("You lost...");
             player->add_match(0);
+            db->increaseGamesPlayed(username, false);
         }
         PlayAgainOrReturn();
         return;
     }
 
     if (dealer->get_points() < 17) {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         do {
             dealer->set_card(deck.draw_card());
@@ -400,23 +488,26 @@ void Mainframe::DealersTurn()
             gameSizer->Layout();
             notebook->Update();
 
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         } while (dealer->get_points() <= 16);
     }
 
     if (dealer->get_points() > player->get_points() && dealer->get_points() <= 21) {
         gameResult->SetLabel("You lost...");
         player->add_match(0);
+        db->increaseGamesPlayed(username, false);
     }
     else if (dealer->get_points() == player->get_points()) {
         gameResult->SetLabel("It's a draw...");
         player->add_match(0);
-        //player->deposit_to_acc(amount);
+        db->depositToBalance(username, ammountBet);
+        db->increaseGamesPlayed(username, false);
     }
     else {
         gameResult->SetLabel("You Won!!!");
         player->add_match(1);
-        //player->deposit_to_acc(amount * 2);
+        db->depositToBalance(username, 2 * ammountBet);
+        db->increaseGamesPlayed(username, true);
     }
 
     PlayAgainOrReturn();
@@ -456,6 +547,8 @@ void Mainframe::InitGame()
     {
         gameResult->SetLabel("Natural Blackjack!\nCongratulations!");
         player->add_match(1);
+        db->depositToBalance(username, 2 * ammountBet);
+        db->increaseGamesPlayed(username, true);
         PlayAgainOrReturn();
     }
 }
@@ -509,6 +602,7 @@ void Mainframe::OnDrawCard(wxCommandEvent& evt)
         {
             gameResult->SetLabel("You lost...");
             player->add_match(0);
+            db->increaseGamesPlayed(username, false);
             PlayAgainOrReturn();
         }
         else
@@ -588,17 +682,33 @@ void Mainframe::DrawDealerCards(bool showOneCardOnly)
 
 std::string Mainframe::GetAccountDetails()
 {
-    std::string accountDetails = "Account Details\nUsername: " + username + "\nBalance: " + std::to_string(loggedInAccount->check_balance())
-        + "\nWin percentage: " + std::to_string(loggedInAccount->get_win_percentage());
+    std::stringstream stream;
+    stream << std::fixed << std::setprecision(2) << db->getBalance(username);
+    std::string accountDetails = "Account Details\nUsername: " + username + "\nBalance: " + stream.str()
+        + "\nWin percentage: " + std::to_string(db->getGamesWon(username) * 100 / db->getGamesPlayed(username));
     return accountDetails;
 }
 
 void Mainframe::DepositMoney(wxCommandEvent& evt)
 {
-    depositSlider = new wxSlider(gameOptionsPanel, wxID_ANY, 100, 100, 10000, wxPoint(500, 275), wxSize(200, -1), wxSL_VALUE_LABEL);
+    withdrawSlider->Show(false);
+    withdrawEnterButton->Show(false);
+    betSlider->Show(false);
+    betButton->Show(false);
 
-    depositEnterButton = new wxButton(gameOptionsPanel, wxID_ANY, "OK", wxPoint(570, 315));
+    if (depositSlider->Show())
+    {
+        depositSlider->SetValue(100);
+        depositSlider->Show(true);
+        depositEnterButton->Show(true);
+    }
+    else
+    {
+        depositSlider->Show(false);
+        depositEnterButton->Show(false);
+    }
 
+    gameOptionsPanel->Layout();
     depositEnterButton->Bind(wxEVT_BUTTON, &Mainframe::OnDepositEntered, this);
 }
 
@@ -606,25 +716,44 @@ void Mainframe::OnDepositEntered(wxCommandEvent& evt)
 {
     long value = depositSlider->GetValue();
     loggedInAccount->deposit(value);
+    db->depositToBalance(username, value);
 
-    depositEnterButton->Destroy();
-    depositSlider->Destroy();
 
-    UpdateAcoountInfo();
+    depositSlider->Show(false);
+    depositEnterButton->Show(false);
+    gameOptionsPanel->Layout();
+
     accountDetailsText->SetLabel(GetAccountDetails());
 }
 
 void Mainframe::WithdrawMoney(wxCommandEvent& evt)
 {
-    if (loggedInAccount->check_balance() == 0) {
+    depositSlider->Show(false);
+    depositEnterButton->Show(false);
+    betSlider->Show(false);
+    betButton->Show(false);
+
+    if (db->getBalance(username) == 0) {
+        gameOptionsPanel->Layout();
         wxMessageBox("You don't have any money to make a withdrawal", "Insufficient funds");
         return;
     }
 
-    withdrawSlider = new wxSlider(gameOptionsPanel, wxID_ANY, 0, 0, loggedInAccount->check_balance(), wxPoint(500, 350), wxSize(200, -1), wxSL_VALUE_LABEL);
+    if (withdrawSlider->Show())
+    {
+        withdrawSlider->SetValue(1);
+        withdrawSlider->SetMax(db->getBalance(username));
+        withdrawSlider->Show(true);
+        withdrawEnterButton->Show(true);
+        withdrawSlider->Refresh();
+    }
+    else
+    {
+        withdrawSlider->Show(false);
+        withdrawEnterButton->Show(false);
+    }
 
-    withdrawEnterButton = new wxButton(gameOptionsPanel, wxID_ANY, "OK", wxPoint(570, 390));
-
+    gameOptionsPanel->Layout();
     withdrawEnterButton->Bind(wxEVT_BUTTON, &Mainframe::OnWithdrawEntered, this);
 }
 
@@ -632,60 +761,28 @@ void Mainframe::OnWithdrawEntered(wxCommandEvent& evt)
 {
     long value = withdrawSlider->GetValue();
     loggedInAccount->withdraw(value);
+    db->withdrawFromBalance(username, value);
 
-    withdrawEnterButton->Destroy();
-    withdrawSlider->Destroy();
+    withdrawSlider->Show(false);
+    withdrawEnterButton->Show(false);
 
-    UpdateAcoountInfo();
     accountDetailsText->SetLabel(GetAccountDetails());
 }
 
 bool Mainframe::VerifyAccountDetails()
 {
-    std::ifstream in;
-    in.open("accounts.txt");
-
-    if (!in) {
-        wxMessageBox(wxT("Failled to open the accounts database."), wxT("Database fail"), wxICON_INFORMATION);
-    }
-
     username = usernameBox->GetValue().ToStdString();
     password = passwordBox->GetValue().ToStdString();
 
-    std::string  existing_name{}, existing_username{}, existing_email{}, existing_balance{}, existing_won{}, existing_played{}, existing_password{};
-
-    int no_attempts{ 3 };
-
-    while (!in.eof()) {
-        std::getline(in, existing_name, ' ');
-        std::getline(in, existing_username, ' ');
-        std::getline(in, existing_email, ' ');
-        std::getline(in, existing_balance, ' ');
-        std::getline(in, existing_won, ' ');
-        std::getline(in, existing_played, ' ');
-        std::getline(in, existing_password);
-
-        while (username == existing_username && password != existing_password && no_attempts != 0) {
-            in.close();
-            return false;
-        }
-
-        if (username == existing_username && password == existing_password) {
-            wxMessageBox(wxT("Logged in successfully!"), wxT("Success"), wxICON_INFORMATION);
-            in.close();
-            loggedInAccount = new Account(existing_name, existing_username, existing_email, existing_password,
-                std::stoi(existing_balance), std::stoi(existing_won), std::stoi(existing_played));
-            player = new Player(*loggedInAccount);
-            return true;
-        }
+    if (db->login(username, password))
+    {
+        loggedInAccount = new Account(db->getFirstName(username), username, db->getEmail(username), password,
+            db->getBalance(username), db->getGamesWon(username), db->getGamesPlayed(username));
+        player = new Player(*loggedInAccount);
+        return true;
     }
-
-    in.close();
-    return false;
-}
-
-void Mainframe::UpdateAcoountInfo()
-{
-    loggedInAccount->delete_from_database();
-    loggedInAccount->add_to_database();
+    else
+    {
+        return false;
+    }
 }

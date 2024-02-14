@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Dealer.h"
 #include "Deck.h"
+#include "DatabaseManager.h"
 
 class Mainframe : public wxFrame
 {
@@ -14,6 +15,12 @@ public:
 	Mainframe(const wxString& title);
 
 private:
+	Account* loggedInAccount;
+	Player* player;
+	Dealer* dealer;
+	Deck deck;
+	DatabaseManager* db;
+
 	wxSimplebook* notebook;
 
 	wxBoxSizer* gameSizer;
@@ -53,8 +60,10 @@ private:
 	wxTextCtrl* firstNameBox;
 	wxTextCtrl* emailBox;
 
+	wxSlider* betSlider;
 	wxSlider* depositSlider;
 	wxSlider* withdrawSlider;
+	wxButton* betButton;
 	wxButton* withdrawEnterButton;
 	wxButton* depositEnterButton;
 
@@ -67,11 +76,7 @@ private:
 	std::string firstName;
 	std::string email;
 	std::string password;
-
-	Account* loggedInAccount;
-	Player* player;
-	Dealer* dealer;
-	Deck deck;
+	int ammountBet;
 
 	void AddSizerToPanel(wxPanel* frame, std::vector<wxControl*> controls);
 
@@ -87,16 +92,17 @@ private:
 	void OnDepositEntered(wxCommandEvent& evt);
 	void WithdrawMoney(wxCommandEvent& evt);
 	void OnWithdrawEntered(wxCommandEvent& evt);
+	void ShowBettingOptions(wxCommandEvent& evt);
 	void OnBeginGame(wxCommandEvent& evt);
 	void OnStopEntered(wxCommandEvent& evt);
 
 	void VerifyExistingAccount(wxCommandEvent& evt);
 	void CreateAccount();
 
+	bool ValidateEmail(const std::string& email);
+
 	void CreateAccountDetailsPanel();
 	bool VerifyAccountDetails();
-
-	void UpdateAcoountInfo();
 
 	void ShowBeginGamePanel();
 
