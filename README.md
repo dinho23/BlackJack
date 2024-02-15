@@ -1,4 +1,4 @@
-# Cross-Platform Blackjack Game with User Management and Data Encryption
+# Cross-Platform Blackjack Game with GUI, User Management and Data Encryption
 
 This project is an implementation of the popular card game Blackjack written in C++17. It features a graphical user interface (GUI) created using wxWidgets, a C++ library for building cross-platform applications. MySQL is utilized for data storage and update, while OpenSSL handles data encryption.
 

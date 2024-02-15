@@ -1,3 +1,0 @@
-Carl carl carl@gmail.com 77 0 1 carl
-Jack jack jack@gmail.com 100 10 20 jack
-Tester test test@gmail.com 744 23 43 test
